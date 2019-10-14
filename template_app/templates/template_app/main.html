@@ -1,0 +1,16 @@
+{% extends 'template_app/base.html' %}
+
+{% comment '' %}
+this is coomment rows
+
+{% endcomment %}
+
+{% block content %}
+    <h2>Main.html</h2>
+    <ul>
+        {% for hobby in hobbies %}
+            <li> {{ hobby }}</li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
