@@ -24,4 +24,7 @@ urlpatterns = [
     path('polls/', include('polls.urls')),
     path('template_app/', include('template_app.urls')),
     path('form_example/', include('form_example.urls')),
+    path('class_view/', include('class_view.urls')),
+
+
 ]

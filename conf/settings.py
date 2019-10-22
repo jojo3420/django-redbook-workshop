@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'polls.apps.PollsConfig',
     'template_app.apps.TemplateAppConfig',
     'form_example.apps.FormExampleConfig',
+    'class_view.apps.ClassViewConfig',
 ]
 
 MIDDLEWARE = [
