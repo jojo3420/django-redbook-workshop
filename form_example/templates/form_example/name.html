@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>name</title>
+</head>
+<body>
+{#    <form action="/your-name/" method="post">#}
+{#        <label for="your_name">Your name: </label>#}
+{#        <input type="text" id="your_name" name="your_name" value="{{ current_name }} ">#}
+{#        <input type="submit" value="Send" />#}
+{#    </form>#}
+
+    <form action="{% url 'form_example:your_name' %}" method="post">
+        {% csrf_token %}
+        {{ nameForm }}
+
+        <!-- <p> tag 로 둘러 싼다. -->
+{#        {{ nameForm.as_p }}#}
+
+        <!-- <li> tag 로 만들어 주며 ul, ol은 개발자가 만들어 줘야 한다. -->
+{#        <ul>#}
+{#            {{ nameForm.as_ul }}#}
+{#        </ul>#}
+
+        <!-- <th>, <tr> tag 로 둘러 싸 주며 <table> tag 는 직접 만들어야 한다. -->
+{#        <table>#}
+{#            <tbody>#}
+{#                {{ nameForm.as_table }}#}
+{#            </tbody>#}
+{#        </table>#}
+
+        <input type="submit" value="Submit" />
+    </form>
+
+</body>
+</html>
