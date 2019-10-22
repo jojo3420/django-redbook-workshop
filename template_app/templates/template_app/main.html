@@ -5,12 +5,20 @@ this is coomment rows
 
 {% endcomment %}
 
+{% block title %}
+    <title>main.html</title>
+{% endblock title %}
+
+{% block h %}
+    <h1> this is main title</h1>
+{% endblock h %}
+
+
 {% block content %}
-    <h2>Main.html</h2>
+    <p>main.html content is ... </p>
     <ul>
         {% for hobby in hobbies %}
             <li> {{ hobby }}</li>
     {% endfor %}
     </ul>
-
-{% endblock %}
+{% endblock content %}

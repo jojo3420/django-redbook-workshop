@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Index</title>
 </head>
@@ -10,6 +11,9 @@
     {% for question in latest_question_list %}
         <li><a href="/polls/{{ question.id }}"> {{ question.question_text }}</a></li>
     {% endfor %}
+        <li><a href="{% url 'template_app:base' %}">template-extend-study : base </a></li>
+        <li><a href="{% url 'template_app:main' %}">template-extend-study : main </a></li>
+
     </ul>
 {% else %}
     <p>No polls are available.</p>
