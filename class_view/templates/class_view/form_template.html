@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Template</title>
+</head>
+<body>
+    <h1>Function View</h1>
+    <form action="{% url 'class_view:my_function_view' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="submit">
+    </form>
+    <hr>
+    <h1>Form Generic View</h1>
+     <form action="{% url 'class_view:my-form-generic-view' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="submit">
+    </form>
+
+
+     <h1>Form-View</h1>
+     <form action="{% url 'class_view:my-form-generic-view' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="submit">
+    </form>
+
+</body>
+</html>

@@ -4,6 +4,9 @@ from . import views
 
 # Class 형 뷰 사용
 from .views import MyClassView
+from .views import AboutView
+from .views import MyFormGenericView
+from django.views.generic import TemplateView
 
 
 app_name = 'class_view'
@@ -17,5 +20,15 @@ urlpatterns = [
     # dispatch() 메서드는 요청을 검사해서 GET, POST 등의 HTTP Method 를 알아낸 다음
     # 인스턴스 내에서 해당 이름을 갖는 메서드로 요청을 중계 해준다.
     # 만약 해당 메서드가 없으면 HttpResponseNotAllow 예외를 발생시킴
-    path('about/', MyClassView.as_view())
+    path('first-class-view/', MyClassView.as_view()),
+
+    # 템플릿 뷰 를 상속 재정의 하였음
+    path('about1/', AboutView.as_view()),
+    # 이방식은 템플릿 뷰를 상속하여 AboutView 만들지 않고 템플릿 뷰를 직접 변경하여 이용함 (아래위 결과는 같음)
+    path('about2/', TemplateView.as_view(template_name="class_view/about.html")),
+    path('success/', TemplateView.as_view(template_name="class_view/success.html")),
+
+    # function view - get, post 처리
+    path('my-function-view/', views.my_function_view, name='my_function_view'),
+    path('my-form-generic-view/', MyFormGenericView.as_view(), name='my-form-generic-view')
 ]
