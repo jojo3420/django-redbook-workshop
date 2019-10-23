@@ -125,3 +125,22 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Logging Settings
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler'
+        },
+    },
+    'loggers': {
+        # 'my-logger': {
+        'logging_app.views.my-logger': {
+           'handlers': ['console'],
+           'level': 'INFO'
+        },
+    },
+}
