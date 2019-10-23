@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'template_app.apps.TemplateAppConfig',
     'form_example.apps.FormExampleConfig',
     'class_view.apps.ClassViewConfig',
+    'logging_app.apps.LoggingAppConfig',
 ]
 
 MIDDLEWARE = [

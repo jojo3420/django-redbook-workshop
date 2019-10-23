@@ -11,10 +11,10 @@
     {% for question in latest_question_list %}
         <li><a href="/polls/{{ question.id }}"> {{ question.question_text }}</a></li>
     {% endfor %}
-        <li><a href="{% url 'template_app:base' %}">template-extend-study : base </a></li>
-        <li><a href="{% url 'template_app:main' %}">template-extend-study : main </a></li>
+        <li><a href="{% url 'template_app:index' %}">template-extend : index</a></li>
         <li><a href="{% url 'form_example:index' %}">form_example : index </a></li>
         <li><a href="{% url 'class_view:index' %}">class view example : index</a></li>
+        <li><a href="{% url 'logging_app:index' %}">logging_app : index</a></li>
 
 
     </ul>
