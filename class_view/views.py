@@ -45,9 +45,11 @@ class MyClassView(View):
 
 class BookListView(ListView):
     """
-    HEAD method 사용용도: 서점에 방문한 직후에 새롭게 출간된 책이 있는지를 서버에게 문의하는 용도
-       최근 발간된 책이 없는데도 책 리스트를 서버로부터 받아온다면, 네트워크 대역폭 낭비이므로,
-       (신규 출간책이 있는 경우에만 응답) 이를 방지하기위해 HEAD method 사용
+    클래스 뷰는 GET, POST 외에 HTTP Method 처리 가능
+
+    HEAD method 사용: 서점에 방문한 직후에 새롭게 출간된 책이 있는지를 서버에게 문의하는 용도
+       최근 발간된 책이 없는데도 책 리스트 전체 데이터를 서버로부터 받아온다면, 네트워크 대역폭 낭비이므로,
+       신규 출간책이 있는 경우에만 응답. (이런 요청을 할때 Http HEAD Method 사용)
        HTTP 프로토콜 규격에 따르면 HEAD 요청에 대한 응답은 바디없이 헤더만 보내주면 된다.
    :param request:
    :return:
@@ -64,7 +66,7 @@ class BookListView(ListView):
 
 class AboutView(TemplateView):
     """
-        제네릭 뷰 : from django.views.generic import TemplateView
+        <제네릭 뷰>
         단순 반복작업을 줄여 주기 위해 상속기능을 이용하여 장고에서 제공해주는 템플릿 뷰
         즉 제네릭 뷰란, 뷰 개발 과정에서 공통적으로 사용 할 수 있는 기능들을 추상화하고,
         이를 장고에서 미리 만들어  제공해주는 클래스형 뷰 이다.
@@ -74,7 +76,7 @@ class AboutView(TemplateView):
     template_name = 'class_view/about.html'
 
     # => template view 는 뷰에 특별한 로직이 없고,
-    # URL에 맞춰 해당 템플릿(html) 을 보여줄 때 사용하는 제네릭 뷰 임
+    # 이 샘플코드는 URL에 맞춰 해당 템플릿(html) 을 보여줄 때 사용하는 제네릭 뷰 임
 
 
 """
@@ -83,7 +85,7 @@ class AboutView(TemplateView):
         종류 : View, TemplateView, RedirectView 
         View : 가장 기본이 되는 최상위 제네릭 뷰로 다른 모 든 제네릭 뷰는 View 의 하위 클래스 임
         TemplateView : 템플릿이 주어지면 템플릿을 렌더링 해줌 
-        RedirectView: URL 이 주어지면  URL로 리다이렉트 시켜줌 
+        RedirectView: URL 이 주어지면 해당 URL로 리다이렉트 시켜줌 
         
     2. Generic Display View : 객체의 리스트를 보여주거나, 특정 객체의 상세 정보를 보여줌.
         종류 : ListView, DetailView 
@@ -111,11 +113,7 @@ class AboutView(TemplateView):
 """
 
 
-# 클래스형 뷰에서 폼 처리
-# 1>최초의 GET 요청에 대한 응답 => 템플릿 렌더링 하여 빈폼 보여줌
-# 2> 폼 전송에 대한 유효한 데이터를 가진 POST 처리 => 데이터 처리 및 리다이렉트
-# 2> 폼 전송에 대한 유효 하지 않은 데이터를 가진 POST 처리 : 에러 출력및 폼 다시 출력
-
+# function view VS class view
 def my_function_view(request):
     if request.method == 'GET':
         # GET 처리
@@ -139,17 +137,28 @@ def my_function_view(request):
     return render(request, 'class_view/form_template.html', {'form': form})
 
 
-# 제네릭 View 를 상속 받음. 추후에 FormView 상속해서 처리하는 것도 나올 것임
+# 제네릭 최상위 View 클래스를 상속 받음. 추후에 FormView 상속해서 처리하는 것도 나올 것임
 class MyFormGenericView(View):
+    """
+    클래스형 뷰에서 폼 처리 패턴
+    1> GET 요청에 대한 응답 => 템플릿 렌더링 하여 template 다시 보여줌
+    2> Form POST 처리 => 유효성 패스 될 경우  데이터 처리 및 리다이렉트
+    3> Form 유효성 검증 실패 POST : 에러 출력 및 template 다시 보여줌
+    """
+    # from 처리를 위해 폼 클래스를 오버라딩 해준다.
     form_class = MyForm
+    # 폼 초기값 지정
     initial = {'key:', 'value'}
+    # 템플릿 경로 지정
     template_name = 'class_view/form_template.html'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class() # form_class(initial=self.initial)
+        # empty form template return
+        form = self.form_class()  # form_class(initial=self.initial)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
+        # form POST 요청 처리
         print('form-class-view post response..')
         form = self.form_class(request.POST)
         if form.is_valid():
@@ -162,15 +171,17 @@ class MyFormGenericView(View):
             print(title, subject, date, email, y_n)
             return HttpResponseRedirect('/class_view/success/')
 
-        # GET: 정상응답 OR POST 유효성 실패 응답 처리
+        # POST 유효성 실패 응답 처리
         return render(request, self.template_name, {'form': form})
 
 
+# FormView 상속한 예제 코드
 class MyFormView(FormView):
     """
         Generic FormView
-        FormView 를 사용하면 상위 클래스에서 이미 정의되어 있기 때문에
-         get(), post() 메서드 정의도 불필요함
+         FormView 를 사용 하면 상위 FormView 클래스에서
+         get(), post() 메서드의 처리가 정의 되어 있으므로 생략 가능.
+         (POST 요청의 구체적 비지니스 로직은 어디서 처리 하는 거지?)
 
          주의할 점
             from_class : 사용자에게 보여줄 폼을 정의한 form.py 파일 내의 클래스명 => form.py로 분리 해야하나?
@@ -191,4 +202,5 @@ class MyFormView(FormView):
         email = form.cleaned_data['email']
         y_n = form.cleaned_data['y_n']
         print(title, subject, date, email, y_n)
+        # 부모클래스의 success_url 로 리다이렉트
         return super(MyFormView, self).form_valid(form)
