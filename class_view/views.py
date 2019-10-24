@@ -7,7 +7,7 @@ from django.views.generic import ListView
 from django.views.generic import TemplateView
 from django.views.generic import FormView
 from .models import Book
-from .models import MyForm
+from .form import MyForm
 
 
 def index(request):
@@ -184,7 +184,7 @@ class MyFormView(FormView):
          (POST 요청의 구체적 비지니스 로직은 어디서 처리 하는 거지?)
 
          주의할 점
-            from_class : 사용자에게 보여줄 폼을 정의한 form.py 파일 내의 클래스명 => form.py로 분리 해야하나?
+            from_class : 사용자에게 보여줄 폼을 정의한 form.py 파일 내의 클래스명 => form.py로 분리 해야하나? OK
             template_name : 폼을 포함하여 렌더링할 템플릿 파일이름(html)
             success_url :  처리가 정상적으로 완료 되었을 때 리다이렉트 시킬 URL
             form_valid() 함수 : 폼 데이터 유효성 체크를 처리할 로직
