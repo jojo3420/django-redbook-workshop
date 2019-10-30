@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'ox0zl&p*^7zag0g%uka^171t0bk0v@8ku%*y@@pf-p2m3+7&ha'
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
 
 # Application definition
 
@@ -74,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'conf.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -84,7 +81,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -104,7 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -120,27 +115,90 @@ USE_L10N = True
 # USE_TZ = True
 USE_TZ = False
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
+# 1. First Logging Settings
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler'
+#         },
+#     },
+#     'loggers': {
+#         # 'my-logger': {   # 계층적 로거 이름으로 변경
+#         'logging_app.views.my-logger': {
+#            'handlers': ['console'],
+#            'level': 'INFO'
+#         },
+#     },
+# }
 
-# Logging Settings
+# 2. 로깅설정 - 디폴트 설정 유지
+# 개발중인 애플리케이션에 사용할 로거가 필요
+# 기존의 디폴트 설정된 로거들을 오버라이딩하여 핸들러, 필터,  포맷터 등의 동작을 변경 하는 방법
+# 특징 : 장고의 디폴트 설정 유지,  개발자 앱 로깅 설정,
+# 즉 장고에서 제공하는 로거들이 모두 종작,  다만 동작하는 방식은 오버라이딩 함
+
+# 로깅 설정에 사용하는 함수를 지정하는 항목, # 생략가능
+LOGGING_CONFIG = 'logging.config.dictConfig'
+
+# logging
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        # verbose 포맷터 :  [로그 메시지를 기록한 시간], 로그레벨 이름, [로거이름:라인번호] 로그메시지 순서로 출력
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+    },
     'handlers': {
+        # 파일 핸들러: DEBUG 및 그 이상의 메시지를 파일로 출력 해주는 FileHandler 사용,
+        #  파일 경오 지정 및 포맷터로 상위의 verbose 사용함.
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/redbook-workshop'),
+            'formatter': 'verbose'
+        },
         'console': {
             'class': 'logging.StreamHandler'
         },
+
     },
     'loggers': {
-        # 'my-logger': {
-        'logging_app.views.my-logger': {
-           'handlers': ['console'],
-           'level': 'INFO'
-        },
-    },
+        #  django 로거: 디폴트로 설정되어 있는 로거인데,  핸들러와 로거 레벨을 오버라이딩하여 동작방식을 변경함.
+        # 디폴트 설정은 log.py 확인
+        # 'django': {
+        #     'handlers': ['file'],
+        #     'level': 'INFO',
+        # },
+
+        # 앱로거 정의 : 콘솔과 파일 핸들러 사용 , 레벨 INFO
+        'logging_app.logger': {
+            'handlers': ['file', 'console'],
+            'level': 'WARNING'
+        }
+    }
 }
+
+# 로깅설정 - 장고 디폴트 로깅 설정 무시
+"""
+LOGGING_CONFIG = None  # DEFAULT_LOGGING 설정과정을 건너뛴다.
+
+# 로거, 핸들러, 필터, 포맷터 새롭게 정의 
+LOGGING = {
+    # 원하는 내용으로 로깅 컴포넌트 설정..
+}
+# 모듈 임폴트 
+import logging.config
+# 직접 dicConfig() 함수를 호출하여 사전형 방식으로 LOGGING  항목에 정의된 내용을 설정함. 
+logging.config.dictConfig(LOGGING)
+"""
