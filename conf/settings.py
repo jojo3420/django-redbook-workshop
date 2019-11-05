@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'form_example.apps.FormExampleConfig',
     'class_view.apps.ClassViewConfig',
     'logging_app.apps.LoggingAppConfig',
+    'books.apps.BooksConfig',
 ]
 
 MIDDLEWARE = [
