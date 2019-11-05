@@ -7,7 +7,6 @@ import logging
 # 로깅 호출ㅇ르 모듈단위로 계층화
 logger = logging.getLogger('logging_app.logger')
 
-
 """
 <로깅 모듈>
          4가지 주요 컴포넌트가 있다. => 로거, 핸들러, 필터, 포맷터
@@ -72,7 +71,20 @@ logger = logging.getLogger('logging_app.logger')
     로거의 계층과가 중요한 이유는 로깅 호출은  부모 로거에게 전파 되기 때문에 중요함.
     즉 로거 트리의 최상단 루트로거에서 핸들러 하나만을 만들어도 하위 로거의 모든 로깅 호출을 잡을 수 있다.
     이런 로깅 호출의 전파는 로거 단위로 제어할 수있는데, 특정 로거에서 상위 로거로 전파되는것을 비활성화 시킬 수 도 있음
-"""
+     장고 로거 정리 
+     1. django logger
+     2. django.request logger : status_code, request 메타항목 가짐  
+     3. django.server logger 
+     4. django.template logger 
+     5. django.db.backend logger : duration, sql, params 메타항목 가짐  
+     6. django.security.* logger :   
+     7. django.db.backends.schema logger
+    
+     필터 정리 
+     1. CallbackFilter
+     2. RequiredDebugFalse
+     3. RequiredDebugTrue 
+    """
 
 
 def index(request):
